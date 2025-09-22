@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Routine App</title>
+    <link rel="manifest" href="data:application/json,{%22name%22:%22Morning%20Routine%22,%22short_name%22:%22Routine%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23ffffff%22,%22theme_color%22:%22%234F46E5%22,%22icons%22:[{%22src%22:%22data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .app-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .app-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .progress-container {
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .current-time {
+            font-size: 18px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        
+        .next-task {
+            font-size: 12px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        
+        .reset-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(180deg);
+        }
+        
+        .tasks-container {
+            padding: 15px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .task-item.completed {
+            opacity: 0.7;
+            background: #e8f5e8;
+        }
+        
+        .task-item.current {
+            background: #fff3cd;
+            box-shadow: 0 0 0 2px #ffc107;
+        }
+        
+        .time-badge {
+            background: #6c757d;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 60px;
+            text-align: center;
+            margin-right: 15px;
+        }
+        
+        .task-emoji {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+        
+        .task-content {
+            flex: 1;
+        }
+        
+        .task-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .task-details {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.3;
+        }
+        
+        .task-checkbox {
+            width: 35px;
+            height: 35px;
+            border: 3px solid #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .task-checkbox.checked {
+            background: #28a745;
+            transform: scale(1.1);
+        }
+        
+        .checkmark {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .task-checkbox.checked .checkmark {
+            display: block;
+        }
+        
+        .bus-reminder {
+            margin: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .celebration {
+            margin: 15px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Color variations for different tasks */
+        .task-morning { border-left-color: #ff9800; }
+        .task-hygiene { border-left-color: #2196f3; }
+        .task-breakfast { border-left-color: #ff5722; }
+        .task-pack { border-left-color: #9c27b0; }
+        .task-bathroom { border-left-color: #00bcd4; }
+        .task-uniform { border-left-color: #f44336; }
+        .task-ready { border-left-color: #4caf50; }
+        
+        .task-morning .time-badge { background: #ff9800; }
+        .task-hygiene .time-badge { background: #2196f3; }
+        .task-breakfast .time-badge { background: #ff5722; }
+        .task-pack .time-badge { background: #9c27b0; }
+        .task-bathroom .time-badge { background: #00bcd4; }
+        .task-uniform .time-badge { background: #f44336; }
+        .task-ready .time-badge { background: #4caf50; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <button class="reset-btn" onclick="resetAll()">↻</button>
+            <div class="app-title">🌟 Morning Routine 🌟</div>
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span id="progress-text">0/7</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+            <div class="current-time" id="current-time">--:--</div>
+            <div class="next-task" id="next-task">Loading...</div>
+        </div>
+        
+        <div class="tasks-container" id="tasks-container">
+            <!-- Tasks will be populated by JavaScript -->
+        </div>
+        
+        <div class="bus-reminder" id="bus-reminder">
+            <!-- Will be populated from JSON -->
+        </div>
+        
+        <div class="celebration" id="celebration" style="display: none;">
+            <!-- Will be populated from JSON -->
+        </div>
+    </div>
+
+    <script>
+        // Load app data from weekday.json
+        let routineItems = [];
+        let appInfo = {};
+        let reminders = [];
+        let settings = {};
+        let appData = {};
+
+        fetch('./weekday.json')
+            .then(response => response.json())
+            .then(data => {
+                appData = data;
+                routineItems = appData.routineItems;
+                appInfo = appData.appInfo;
+                reminders = appData.reminders;
+                settings = appData.settings;
+                initializeApp();
+            })
+            .catch(err => {
+                document.getElementById('tasks-container').innerHTML = '<div style="color:red; padding:20px;">Failed to load routine data.</div>';
+            });
+
+        let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
+        let currentDate = new Date().toDateString();
+
+        // Reset if new day
+        if (localStorage.getItem('lastDate') !== currentDate) {
+            completedTasks = {};
+            localStorage.setItem('lastDate', currentDate);
+            localStorage.setItem('completedTasks', JSON.stringify({}));
+        }
+
+        function renderTasks() {
+            if (!routineItems || routineItems.length === 0) return;
+            const container = document.getElementById('tasks-container');
+            const currentTime = new Date();
+            const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
+            let currentTaskIndex = -1;
+
+            // Find current task
+            for (let i = 0; i < routineItems.length; i++) {
+                const [hour, minute] = routineItems[i].time.split(':').map(Number);
+                const taskTime = hour * 60 + minute;
+                if (currentMinutes <= taskTime + 30) {
+                    currentTaskIndex = i;
+                    break;
+                }
+            }
+
+            container.innerHTML = '';
+
+            routineItems.forEach((task, index) => {
+                const isCompleted = completedTasks[task.id];
+                const isCurrent = index === currentTaskIndex;
+
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-item ${task.colorTheme.class} ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`;
+                taskElement.onclick = () => toggleTask(task.id);
+
+                taskElement.innerHTML = `
+                    <div class="time-badge" style="background: ${task.colorTheme.badgeColor}">${task.time}</div>
+                    <div class="task-emoji">${task.emoji}</div>
+                    <div class="task-content">
+                        <div class="task-title">${task.title}</div>
+                        <div class="task-details">${task.details}</div>
+                    </div>
+                    <div class="task-checkbox ${isCompleted ? 'checked' : ''}">
+                        <span class="checkmark">✓</span>
+                    </div>
+                `;
+
+                container.appendChild(taskElement);
+            });
+
+            updateProgress();
+            updateNextTask(currentTaskIndex);
+        }
+
+        function toggleTask(taskId) {
+            completedTasks[taskId] = !completedTasks[taskId];
+            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+
+            // Haptic feedback for mobile (if enabled in settings)
+            if (settings && settings.vibrationEnabled && navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            renderTasks();
+        }
+
+        function updateProgress() {
+            if (!routineItems || routineItems.length === 0) return;
+            const completed = Object.values(completedTasks).filter(Boolean).length;
+            const total = routineItems.length;
+            const percentage = (completed / total) * 100;
+
+            document.getElementById('progress-text').textContent = `${completed}/${total}`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+
+            const celebration = document.getElementById('celebration');
+            if (completed === total) {
+                celebration.style.display = 'block';
+            } else {
+                celebration.style.display = 'none';
+            }
+        }
+
+        function updateNextTask(currentIndex) {
+            if (!routineItems || routineItems.length === 0) return;
+            const nextTaskDiv = document.getElementById('next-task');
+            if (currentIndex >= 0 && currentIndex < routineItems.length) {
+                nextTaskDiv.textContent = `Next: ${routineItems[currentIndex].title}`;
+                nextTaskDiv.style.display = 'inline-block';
+            } else if (currentIndex >= routineItems.length) {
+                nextTaskDiv.textContent = 'All done! 🎉';
+                nextTaskDiv.style.display = 'inline-block';
+            } else {
+                nextTaskDiv.style.display = 'none';
+            }
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        function resetAll() {
+            if (confirm('Reset all tasks for today?')) {
+                completedTasks = {};
+                localStorage.setItem('completedTasks', JSON.stringify({}));
+                renderTasks();
+            }
+        }
+
+        // Initialize
+        function initializeApp() {
+            // Set app title from JSON
+            document.querySelector('.app-title').textContent = `🌟 ${appInfo.name} 🌟`;
+
+            // Set reminders from JSON
+            const busReminderEl = document.getElementById('bus-reminder');
+            const busReminder = reminders.find(r => r.id === 'bus_reminder');
+            if (busReminder) {
+                busReminderEl.textContent = busReminder.message;
+                busReminderEl.style.background = busReminder.gradient;
+            }
+
+            const celebrationEl = document.getElementById('celebration');
+            const celebration = reminders.find(r => r.id === 'completion_celebration');
+            if (celebration) {
+                celebrationEl.textContent = celebration.message;
+                celebrationEl.style.background = celebration.gradient;
+            }
+
+            renderTasks();
+            updateTime();
+        }
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+
+        // Update current task every minute
+        setInterval(renderTasks, 60000);
+
+        // Install prompt for PWA
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Show install button after 3 seconds
+            setTimeout(() => {
+                if (confirm('Install this app on your device for better experience?')) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        deferredPrompt = null;
+                    });
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

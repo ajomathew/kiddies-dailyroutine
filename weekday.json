@@ -1,0 +1,132 @@
+{
+    "appInfo": {
+        "name": "Morning Routine",
+        "version": "1.0.0",
+        "busArrivalTime": "8:30",
+        "totalDurationMinutes": 135
+    },
+    "routineItems": [
+        {
+            "id": "wakeup",
+            "time": "6:15",
+            "emoji": "⏰",
+            "title": "Wake Up Time!",
+            "details": "Get out of bed and wash your face",
+            "category": "morning",
+            "estimatedDuration": 10,
+            "colorTheme": {
+                "class": "task-morning",
+                "borderColor": "#ff9800",
+                "badgeColor": "#ff9800"
+            }
+        },
+        {
+            "id": "hygiene",
+            "time": "6:30",
+            "emoji": "🦷",
+            "title": "Brush & Groom",
+            "details": "Brush teeth, comb hair, look neat and tidy",
+            "category": "hygiene",
+            "estimatedDuration": 15,
+            "colorTheme": {
+                "class": "task-hygiene",
+                "borderColor": "#2196f3",
+                "badgeColor": "#2196f3"
+            }
+        },
+        {
+            "id": "breakfast",
+            "time": "6:45",
+            "emoji": "🍽️",
+            "title": "Breakfast Time",
+            "details": "Eat breakfast, drink tea/milk, clean up",
+            "category": "nutrition",
+            "estimatedDuration": 30,
+            "colorTheme": {
+                "class": "task-breakfast",
+                "borderColor": "#ff5722",
+                "badgeColor": "#ff5722"
+            }
+        },
+        {
+            "id": "pack",
+            "time": "7:15",
+            "emoji": "📚",
+            "title": "Pack School Bag",
+            "details": "Check timetable, pack books, water bottle & snacks",
+            "category": "preparation",
+            "estimatedDuration": 20,
+            "colorTheme": {
+                "class": "task-pack",
+                "borderColor": "#9c27b0",
+                "badgeColor": "#9c27b0"
+            }
+        },
+        {
+            "id": "bathroom",
+            "time": "7:35",
+            "emoji": "🚿",
+            "title": "Bathroom & Bath",
+            "details": "Go to toilet, take a nice bath, dry yourself",
+            "category": "hygiene",
+            "estimatedDuration": 45,
+            "colorTheme": {
+                "class": "task-bathroom",
+                "borderColor": "#00bcd4",
+                "badgeColor": "#00bcd4"
+            }
+        },
+        {
+            "id": "uniform",
+            "time": "8:20",
+            "emoji": "👕",
+            "title": "Get Dressed",
+            "details": "Put on school uniform, socks, shoes & ID card",
+            "category": "preparation",
+            "estimatedDuration": 5,
+            "colorTheme": {
+                "class": "task-uniform",
+                "borderColor": "#f44336",
+                "badgeColor": "#f44336"
+            }
+        },
+        {
+            "id": "ready",
+            "time": "8:25",
+            "emoji": "🎒",
+            "title": "Ready to Go!",
+            "details": "Grab bag, final bathroom check, wait for bus",
+            "category": "final",
+            "estimatedDuration": 5,
+            "colorTheme": {
+                "class": "task-ready",
+                "borderColor": "#4caf50",
+                "badgeColor": "#4caf50"
+            }
+        }
+    ],
+    "reminders": [
+        {
+            "id": "bus_reminder",
+            "type": "info",
+            "message": "🚌 Bus arrives at 8:30 AM - Don't be late! 🚌",
+            "gradient": "linear-gradient(45deg, #ff6b6b, #4ecdc4)"
+        },
+        {
+            "id": "completion_celebration",
+            "type": "celebration",
+            "message": "🎉 Amazing! You're all ready for school! 🎉",
+            "gradient": "linear-gradient(45deg, #ffd700, #ff8c00)"
+        }
+    ],
+    "settings": {
+        "autoReset": true,
+        "vibrationEnabled": true,
+        "soundEnabled": false,
+        "darkMode": false,
+        "notifications": {
+            "enabled": true,
+            "reminderMinutes": 5
+        }
+    }
+}
