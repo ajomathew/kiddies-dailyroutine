@@ -8,7 +8,7 @@
     "routineItems": [
         {
             "id": "wakeup",
-            "time": "6:15",
+            "time": "7:15",
             "emoji": "⏰",
             "title": "Wake Up Time!",
             "details": "Get out of bed and wash your face",
@@ -22,7 +22,7 @@
         },
         {
             "id": "hygiene",
-            "time": "6:30",
+            "time": "7:30",
             "emoji": "🦷",
             "title": "Brush & Groom",
             "details": "Brush teeth, comb hair, look neat and tidy",
@@ -36,7 +36,7 @@
         },
         {
             "id": "breakfast",
-            "time": "6:45",
+            "time": "7:45",
             "emoji": "🍽️",
             "title": "Breakfast Time",
             "details": "Eat breakfast, drink tea/milk, clean up",
@@ -64,7 +64,7 @@
         },
         {
             "id": "bathroom",
-            "time": "7:35",
+            "time": "8:00",
             "emoji": "🚿",
             "title": "Bathroom & Bath",
             "details": "Go to toilet, take a nice bath, dry yourself",
