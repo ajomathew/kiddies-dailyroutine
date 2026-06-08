@@ -301,6 +301,7 @@
                 appInfo = appData.appInfo;
                 reminders = appData.reminders;
                 settings = appData.settings;
+                appInfo.totalDurationMinutes = calculateTotalDuration('wakeup', 'ready');
                 initializeApp();
             })
             .catch(err => {
@@ -415,6 +416,24 @@
                 hour12: false 
             });
             document.getElementById('current-time').textContent = timeString;
+        }
+
+        function calculateTotalDuration(startTaskId, endTaskId) {
+            const findMinutes = (taskId) => {
+                const task = routineItems.find(item => item.id === taskId);
+                if (!task) return null;
+                const [hour, minute] = task.time.split(':').map(Number);
+                return hour * 60 + minute;
+            };
+
+            const startMinutes = findMinutes(startTaskId);
+            const endMinutes = findMinutes(endTaskId);
+
+            if (startMinutes === null || endMinutes === null) {
+                return 0;
+            }
+
+            return Math.max(0, endMinutes - startMinutes);
         }
 
         function resetAll() {
